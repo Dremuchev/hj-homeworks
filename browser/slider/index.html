@@ -11,7 +11,7 @@
 <body>
   <section class="product-item">
     <div class="product-gallery">
-      <img src="i/spinner.gif" alt="" id="slider">
+      img src="i/airmax-jump.png" alt="" id="slider">
     </div>
     <div class="product-data">
       <p class="product-firm">Nike</p>
@@ -31,5 +31,23 @@
       </div>
     </div>
   </section>
+  <script>
+      const img = document.getElementById('slider');
+      const imgFolder = [
+          "i/airmax-jump.png",
+          "i/airmax-on-foot.png",
+          "i/airmax-playground.png",
+          "i/airmax-top-view.png",
+          "i/airmax.png"
+      ];
+      let step = 1;
+      setInterval(() => {
+          img.src = imgFolder[step];
+          step += 1;
+          if(step === imgFolder.length) {
+              step = 0;
+          }
+      }, 5000);
+  </script>
 </body>
 </html>
