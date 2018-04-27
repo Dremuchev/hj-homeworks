@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Задача 1. Выпадающее меню | Домашнее задание к лекции 1.2</title>
   <link rel="stylesheet" href="css/style.css">
+  <script src="index.js"></script>
 </head>
 <body>
   <div class="wrapper-dropdown">Мой профиль
@@ -15,15 +16,5 @@
       <li><a href="#">Выйти</a></li>
     </ul>
   </div>
-  <script>
-const wrapperDropdown = document.getElementsByClassName('wrapper-dropdown');
-wrapperDropdown[0].onclick = () => {
-    if(wrapperDropdown[0].className === 'wrapper-dropdown') {
-        wrapperDropdown[0].className = 'wrapper-dropdown active';
-    } else {
-        wrapperDropdown[0].className = 'wrapper-dropdown';
-    }
-}
-  </script>
 </body>
 </html>
