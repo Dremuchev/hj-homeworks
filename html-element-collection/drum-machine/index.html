@@ -34,14 +34,6 @@
   		<audio src="wav/ride.wav" />
   	</li>
   </ul>
-  <script>
-      const btnsArray = Array.from(document.getElementsByClassName('drum-kit__drum'));
-      const players = document.getElementsByTagName('audio');
-      btnsArray.forEach((el, index) => {
-          el.onclick = () => {
-              players[index].play();
-		  }
-	  })
-  </script>
+  <script src="index.js"></script>
 </body>
 </html>
