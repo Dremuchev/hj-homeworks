@@ -6,14 +6,15 @@ xhr.send();
 let str = '';
 function onLoad() {
     const books = JSON.parse(xhr.responseText);
-    console.log(books);
+    console.log(books[0].title);
     for (let book of books) {
-        str += '<li>' +
+        console.log(book.title, book.author.name, book.info)
+        str += '<li ' +
             'data-title="' + book.title +
             '" data-author="' + book.author.name +
             '" data-info="' + book.info +
             '" data-price="' + book.price +
-            '<img src="' + book.cover.small +
+            '"> <img src="' + book.cover.small +
             '"></li>'
     }
     document.getElementById('content').innerHTML = str;
