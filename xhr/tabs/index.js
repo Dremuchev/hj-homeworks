@@ -1,9 +1,10 @@
+
 'use strict';
 const buttons =  document.querySelectorAll('nav a');
-const xhr = new XMLHttpRequest();
 function showContent(event) {
     event.preventDefault();
-    if (!this.classList.contains('active') || xhr.responseText === "") {
+    if (!this.classList.contains('active')) {
+        const xhr = new XMLHttpRequest();
         xhr.addEventListener('load', () => document.getElementById('content').innerHTML = xhr.responseText);
         xhr.addEventListener('loadstart', () => document.getElementById('preloader').classList.remove('hidden'));
         xhr.addEventListener('loadend', () => document.getElementById('preloader').classList.add('hidden'));
