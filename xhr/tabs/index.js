@@ -1,4 +1,3 @@
-
 'use strict';
 const buttons =  document.querySelectorAll('nav a');
 function showContent(event) {
