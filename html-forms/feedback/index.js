@@ -15,17 +15,8 @@ textArea.addEventListener('input', validateMessage);
 const main = document.querySelector('#output');
 
 const submit = document.querySelectorAll('.button-contact');
-submit[0].addEventListener('click', () => {
-    form.classList.add('hidden');
-    main.classList.remove('hidden');
-    console.log(form.classList.contains('hidden'));
-    console.log(event)
-})
-submit[1].addEventListener('click', () => {
-    form.classList.remove('hidden');
-    main.classList.add('hidden');
-console.log(form.classList.contains('hidden'));
-})
+submit[0].addEventListener('click', toMain);
+submit[1].addEventListener('click', toForm);
 
 let counter = 0;
 function validateForm() {
@@ -49,14 +40,14 @@ function validateMessage() {
         }
     }
 }
-// function toggleForm() {
-//     if(form.classList.contains('hidden')) {
-//         form.classList.remove('hidden');
-//         main.classList.add('hidden');
-//         console.log('activate FORM!');
-//     } else {
-//         form.classList.add('hidden');
-//         main.classList.remove('hidden');
-//         console.log('activate OUTPUT!');
-//     }
-// }
+
+function toForm() {
+    form.classList.remove('hidden');
+    main.classList.add('hidden');
+}
+
+function toMain(event) {
+    event.preventDefault();
+    form.classList.add('hidden');
+    main.classList.remove('hidden');
+}
