@@ -7,6 +7,8 @@ for(let input of inputs) {
         input.type = "number";
     }
     input.addEventListener('change', validateForm);
+    input.addEventListener('input', checkCounter);
+    input.addEventListener('focus', checkCounter);
 }
 
 const textArea = document.querySelector('textarea');
@@ -15,39 +17,53 @@ textArea.addEventListener('input', validateMessage);
 const main = document.querySelector('#output');
 
 const submit = document.querySelectorAll('.button-contact');
-submit[0].addEventListener('click', toMain);
-submit[1].addEventListener('click', toForm);
+submit[0].addEventListener('click', (e) => {
+    form.classList.add('hidden');
+    main.classList.remove('hidden');
+    e.preventDefault();
+})
+submit[1].addEventListener('click', (e) => {
+    form.classList.remove('hidden');
+    main.classList.add('hidden');
+    e.preventDefault();
+})
 
 let counter = 0;
 function validateForm() {
-    if (counter < inputs.length) {
+    if (counter <= inputs.length) {
         if (this.value !== "") {
-            counter++;
-            validateMessage();
+            if(counter !== inputs.length) {
+                counter++;
+            }
         }
-        console.log(this.name !== 'email' && this.name !== 'phone', this.name);
         if (this.name !== 'email' && this.name !== 'phone') {
             document.querySelector(`#${this.name}`).innerHTML = this.value;
         }
+        console.log(counter)
+        checkCounter.call(this);
+    }
+    if (this.value === '') {
+        counter--;
+        checkCounter.call(this);
+    }
+}
+function checkCounter() {
+    if(counter >= inputs.length - 1 &&  this.value !== '') {
+        if(textArea.value !== "") {
+            submit[0].disabled = false;
+        }
+    } else {
+        submit[0].disabled = true;
     }
 }
 function validateMessage() {
     if(textArea.value !== "") {
-        submit[0].disabled = false;
         if(this.name !== 'email' && this.name !== 'phone') {
-            console.log('messageToOutput');
             document.querySelector(`#${this.name}`).innerHTML = this.value;
         }
     }
-}
-
-function toForm() {
-    form.classList.remove('hidden');
-    main.classList.add('hidden');
-}
-
-function toMain(event) {
-    event.preventDefault();
-    form.classList.add('hidden');
-    main.classList.remove('hidden');
+    if(counter >= inputs.length - 1) {
+        submit[0].disabled = false;
+    }
+    checkCounter.call(this);
 }
