@@ -25,7 +25,6 @@ submit[0].addEventListener('click', (e) => {
 submit[1].addEventListener('click', (e) => {
     form.classList.remove('hidden');
     main.classList.add('hidden');
-    e.preventDefault();
 })
 
 let counter = 0;
