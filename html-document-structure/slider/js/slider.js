@@ -4,7 +4,7 @@ let currentSlide = slides.firstElementChild;
 currentSlide.classList.add('slide-current');
 const buttons = document.querySelectorAll('.slider-nav a');
 for(let button of buttons) {
-    button.addEventListener('click', () => moveSlide(button.dataset.action));
+    button.addEventListener('click', moveSlide);
 }
 const next = document.querySelector('[data-action = "next"]');
 const last = document.querySelector('[data-action = "last"]');
@@ -30,8 +30,8 @@ function toggleButtons() {
         first.classList.remove('disabled');
     }
 }
-function moveSlide(button) {
-    switch (button) {
+function moveSlide() {
+    switch (this.dataset.action) {
         case 'next':
             if (currentSlide.nextElementSibling) {
                 currentSlide.classList.remove('slide-current');
