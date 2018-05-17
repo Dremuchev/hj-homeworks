@@ -29,7 +29,6 @@ function toggleButtons() {
         prev.classList.remove('disabled');
         first.classList.remove('disabled');
     }
-
 }
 function moveSlide(button) {
     switch (button) {
