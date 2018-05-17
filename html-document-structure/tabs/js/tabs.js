@@ -1,8 +1,7 @@
 'use strict';
 const tabsNav = document.querySelector('.tabs-nav');
 for(let i = 0; i < 3; i++) {
-    const copy = document.querySelector('.tabs-nav li').cloneNode(true);
-    tabsNav.appendChild(copy);
+    tabsNav.appendChild(document.querySelector('.tabs-nav li').cloneNode(true));
 }
 const forRemove = document.querySelector('.tabs-nav li');
 forRemove.parentNode.removeChild(forRemove);
