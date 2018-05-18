@@ -1,23 +1,10 @@
 'use strict';
-let direction;
 function handleTableClick(event) {
     if(event.target.tagName === 'TH') {
         const title = event.target.dataset.propName;
-        if(!direction) {
-            direction = 1;
-            event.target.dataset.dir = direction;
-            event.currentTarget.dataset.sortBy = title;
-            sortTable(title, direction);
-        } else if (direction === 1) {
-            direction = -1;
-            event.target.dataset.dir = direction;
-            event.currentTarget.dataset.sortBy = title;
-            sortTable(title, direction);
-        } else {
-            direction = 1;
-            event.target.dataset.dir = direction;
-            event.currentTarget.dataset.sortBy = title;
-            sortTable(title, direction);
-        }
+        const dir = parseInt(event.target.dataset.dir);
+        event.target.dataset.dir = (isNaN(dir)) ? 1 : (dir === 1) ? -1 : 1;
+        event.currentTarget.dataset.sortBy = title;
+        sortTable(title, event.target.dataset.dir);
     }
 }
