@@ -11,9 +11,9 @@ function toggleMenu(event) {
 }
 
 function openLink(event) {
-  event.preventDefault();
   console.log(this.textContent);
-  // event.stopPropagation();
+  event.preventDefault();
+  event.stopPropagation();
 }
 
 function init(node) {
