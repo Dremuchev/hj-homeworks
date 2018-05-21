@@ -5,7 +5,7 @@ window.addEventListener('load', () => {
     counterInfo.innerText = localStorage.getItem('counter');
     counter = parseInt(localStorage.getItem('counter'));
 });
-document.addEventListener('click', changeCounter);
+document.getElementsByClassName('wrap-btns')[0].addEventListener('click', changeCounter);
 function changeCounter(event) {
     switch(event.target.id) {
         case 'increment':
