@@ -46,7 +46,6 @@ function loginIn(event) {
             checkboxToggle();
         })
         const loginForm = new FormData(signIn);
-        console.log(loginForm.get('email') !== '' && loginForm.get('password') !== '');
         if (loginForm.get('email') !== '' && loginForm.get('password') !== '') {
             xhr.open('POST', 'https://neto-api.herokuapp.com/signin');
             xhr.send(loginForm);
@@ -78,8 +77,6 @@ function loginUp(event) {
                 newUser[key] = value;
         }
         const str = JSON.stringify(newUser);
-        console.log(str);
-        console.log(newUser);
         xhr.open('POST', 'https://neto-api.herokuapp.com/signup');
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(str);
