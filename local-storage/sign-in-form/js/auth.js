@@ -6,14 +6,14 @@ const check = document.getElementById('check');
 const outputIn = signIn.querySelector('.error-message');
 check.addEventListener('click', () => {
     if(checkboxToggle()) {
-        localStorage.clear();
-        outputIn.innerText = '';
-        check.value = 0;
-        checkboxToggle();
-    } else {
-        check.value = 1;
-        checkboxToggle();
-    }
+    localStorage.clear();
+    outputIn.innerText = '';
+    check.value = 0;
+    checkboxToggle();
+} else {
+    check.value = 1;
+    checkboxToggle();
+}
 })
 const inputs = signIn.querySelectorAll('.input');
 for(let input of inputs) {
@@ -43,10 +43,9 @@ function loginIn(event) {
         event.preventDefault();
         xhr.addEventListener('load', (event) => {
             outputIn.innerText = JSON.parse(xhr.responseText).message;
-            checkboxToggle();
-        })
+        checkboxToggle();
+    })
         const loginForm = new FormData(signIn);
-        console.log(loginForm.get('email') !== '' && loginForm.get('password') !== '');
         if (loginForm.get('email') !== '' && loginForm.get('password') !== '') {
             xhr.open('POST', 'https://neto-api.herokuapp.com/signin');
             xhr.send(loginForm);
@@ -66,20 +65,18 @@ function loginUp(event) {
         event.stopPropagation();
         xhr.addEventListener('load', (event) => {
             if (200 <= xhr.status && xhr.status < 300) {
-                outputUP.innerText = JSON.parse(xhr.responseText).message;
-            } else {
-                outputUP.innerText = 'Произошла ошибка! Повторите процедуру позднее... Приносим свои извенения!';
-                throw new Error('Ошибка: ' + xhr.status + ' : ' + xhr.statusText);
-            }
-        });
+            outputUP.innerText = JSON.parse(xhr.responseText).message;
+        } else {
+            outputUP.innerText = 'Произошла ошибка! Повторите процедуру позднее... Приносим свои извенения!';
+            throw new Error('Ошибка: ' + xhr.status + ' : ' + xhr.statusText);
+        }
+    });
         const signUpForm = new FormData(signUp);
         const newUser = {};
         for (const [key, value] of signUpForm) {
-                newUser[key] = value;
+            newUser[key] = value;
         }
         const str = JSON.stringify(newUser);
-        console.log(str);
-        console.log(newUser);
         xhr.open('POST', 'https://neto-api.herokuapp.com/signup');
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(str);
