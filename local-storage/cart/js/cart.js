@@ -1,59 +1,26 @@
 'use strict';
-let instant;
 const quickCart = document.getElementById('quick-cart');
-const addToCart = document.getElementById('AddToCartForm');
-const sendForm = document.getElementById('AddToCart');
+const form = document.getElementById('AddToCartForm');
+const button = document.getElementById('AddToCart');
 const colorSwatch = document.getElementById('colorSwatch');
 const sizeSwatch = document.getElementById('sizeSwatch');
-window.addEventListener('load', () => {
-    sendRequest('color');
-    sendRequest('size');
-    sendRequest('getCart');
-})
-function sendRequest(swatch) {
+window.addEventListener('load', getColors);
+window.addEventListener('load', getSizes);
+window.addEventListener('load', getCart);
+button.addEventListener('click', sendData);
+form.addEventListener('click', swatchHandler);
+function getColors() {
     const xhr = new XMLHttpRequest();
-    if (swatch === 'color') {
-        xhr.open('GET', 'https://neto-api.herokuapp.com/cart/colors');
-        xhr.send();
-        xhr.addEventListener('load', () => {
-            const result = JSON.parse(xhr.responseText);
-            createColorSwatch(result);
-            if (localStorage.colorChecked) {
-                document.querySelector(`input[id=${localStorage.colorChecked}]`).setAttribute('checked', true);
-            }
-            console.log(result);
-        })
-    }
-    if (swatch === 'size') {
-        xhr.open('GET', 'https://neto-api.herokuapp.com/cart/sizes');
-        xhr.send();
-        xhr.addEventListener('load', () => {
-            const result = JSON.parse(xhr.responseText);
-            createSizeSwatch(result);
-            if (localStorage.sizeChecked) {
-                document.querySelector(`input[id=${localStorage.sizeChecked}]`).setAttribute('checked', true);
-            }
-            console.log(result);
-        })
-    }
-    if (swatch === 'getCart') {
-        const formData = new FormData(addToCart);
-        formData.set('productId', `${addToCart.dataset.productId}`);
-        xhr.open('GET', 'https://neto-api.herokuapp.com/cart');
-        xhr.send();
-        xhr.addEventListener('load', getCart);
-    }
-    if (swatch === 'deleteItem') {
-        const formData = new FormData();
-        formData.set('productId', `${addToCart.dataset.productId}`);
-        xhr.open('POST', 'https://neto-api.herokuapp.com/cart/remove');
-        xhr.send(formData);
-        xhr.addEventListener('load', getCart);
-    }
+    xhr.open('GET', 'https://neto-api.herokuapp.com/cart/colors');
+    xhr.send();
+    xhr.addEventListener('load', () => {
+        createColorsSwatch(JSON.parse(xhr.responseText));
+        if (localStorage.colorChecked) {
+            document.querySelector(`input[id=${localStorage.colorChecked}]`).setAttribute('checked', true);
+        }
+    })
 }
-sendForm.addEventListener('click', sendData);
-addToCart.addEventListener('click', swatchHandler);
-function createColorSwatch(result) {
+function createColorsSwatch(result) {
     for (let i = 0; i < result.length; i++) {
         const div = document.createElement('div');
         const tooltip = document.createElement('div');
@@ -89,8 +56,18 @@ function createColorSwatch(result) {
         div.appendChild(label);
         label.appendChild(span);
         label.appendChild(img);
-        console.log(div);
     }
+}
+function getSizes() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://neto-api.herokuapp.com/cart/sizes');
+    xhr.send();
+    xhr.addEventListener('load', () => {
+        createSizeSwatch(JSON.parse(xhr.responseText));
+    if (localStorage.sizeChecked) {
+        document.querySelector(`input[id=${localStorage.sizeChecked}]`).setAttribute('checked', true);
+    }
+})
 }
 function createSizeSwatch(result) {
     for (let i = 0; i < result.length; i++) {
@@ -122,7 +99,15 @@ function createSizeSwatch(result) {
         label.appendChild(img);
     }
 }
-function getCart(result) {
+function getCart() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://neto-api.herokuapp.com/cart');
+    xhr.send();
+    xhr.addEventListener('load', () => {
+        createCart(JSON.parse(xhr.responseText));
+    })
+}
+function createCart(result) {
     quickCart.innerHTML = '';
     for (let i = 0; i < result.length; i++) {
         const outerDiv = document.createElement('div');
@@ -163,7 +148,7 @@ function getCart(result) {
         document.querySelector('.remove').addEventListener('click', () => {
             const remove = document.querySelector('.remove');
             remove.parentElement.removeChild(remove);
-            sendRequest('deleteItem');
+            removeItem();
         })
     }
     getSum(result);
@@ -189,22 +174,16 @@ function getSum(result) {
     span.appendChild(strong);
     span.appendChild(price);
 }
-// function showCart() {
-//     const result = JSON.parse(this.responseText);
-//     getCart(result);
-//     if (document.querySelector('.remove')) {
-//         document.querySelector('.remove').addEventListener('click', () => {
-//             const remove = document.querySelector('.remove');
-//             remove.parentElement.removeChild(remove);
-//             sendRequest('deleteItem');
-//         })
-//     }
-//     getSum(result);
-//     console.log(result);
-// }
+function removeItem() {
+    const xhr = new XMLHttpRequest();
+    const formData = new FormData();
+    formData.set('productId', `${form.dataset.productId}`);
+    xhr.open('POST', 'https://neto-api.herokuapp.com/cart/remove');
+    xhr.send(formData);
+    xhr.addEventListener('load', getCart);
+}
 function swatchHandler(event) {
     if (event.target.name === 'size' || event.target.name === 'color') {
-        console.log('da');
         const sizeChecked = sizeSwatch.querySelector('input[checked]');
         const colorChecked = colorSwatch.querySelector('input[checked]');
         if (event.target.name === 'size') {
@@ -220,31 +199,21 @@ function swatchHandler(event) {
             localStorage.colorChecked = event.target.id;
         }
         event.target.setAttribute('checked', true);
-    } else {
-        return;
     }
 }
 function sendData(event) {
     event.preventDefault();
-    if (document.querySelector('input[checked]')) {
+    const sizeChecked = sizeSwatch.querySelector('input[checked]');
+    const colorChecked = colorSwatch.querySelector('input[checked]');
+    if (sizeChecked && colorChecked) {
         const xhr = new XMLHttpRequest();
-        const formData = new FormData(addToCart);
-        formData.set('productId', `${addToCart.dataset.productId}`);
-        // console.log(colorSwatch.querySelector('input[checked]').value);
-        const sizeChecked = sizeSwatch.querySelector('input[checked]');
-        const colorChecked = colorSwatch.querySelector('input[checked]');
-        if(sizeChecked) {
-            formData.append('size', `${sizeChecked.value}`);
-        }
-        if(colorChecked) {
-            formData.append('color', `${colorChecked.value}`);
-        }
+        const formData = new FormData(form);
+        formData.set('productId', `${form.dataset.productId}`);
         xhr.open('POST', 'https://neto-api.herokuapp.com/cart');
         xhr.send(formData);
         xhr.addEventListener('load', () => {
-            const result = JSON.parse(xhr.responseText);;
-            console.log(result);
-            sendRequest('getCart')
+            const result = JSON.parse(xhr.responseText);
+            createCart(result);
         })
     }
 }
