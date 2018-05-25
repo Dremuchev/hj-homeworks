@@ -40,12 +40,12 @@ function createColorsSwatch(result) {
             img.src = 'https://neto-api.herokuapp.com/hj/3.3/cart/soldout.png?10994296540668815886';
         }
         tooltip.classList.add('tooltip');
-        tooltip.innerText = `${result[i].title}`;
+        tooltip.innerText = result[i].title;
         input.setAttribute('quickbeam', 'color');
         input.id = `swatch-1-${result[i].code}`;
         input.type = 'radio';
         input.name = 'color';
-        input.value = `${result[i].code}`;
+        input.value = result[i].code;
         label.setAttribute('for', `swatch-1-${result[i].code}`);
         label.style = `border-color: ${result[i].code};`;
         span.style = `border-color: ${result[i].code};`;
@@ -89,9 +89,9 @@ function createSizeSwatch(result) {
         input.id = `swatch-0-${result[i].type}`;
         input.type = 'radio';
         input.name = 'size';
-        input.value = `${result[i].type}`;
+        input.value = result[i].type;
         label.setAttribute('for', `swatch-0-${result[i].type}`);
-        label.innerText = `${result[i].title}`
+        label.innerText = result[i].title;
         img.classList.add('crossed-out');
         sizeSwatch.appendChild(div);
         div.appendChild(input);
@@ -126,7 +126,7 @@ function createCart(result) {
         img.title = result[i].title;
         s1.classList.add('s1');
         s1.setAttribute('style', 'background-color: #000; opacity: .5');
-        s1.innerText = `$${result[i].price}`;
+        s1.innerText = '$' + result[i].price;
         s2.classList.add('s2');
         count.classList.add('count');
         count.classList.add('hide');
@@ -177,7 +177,7 @@ function getSum(result) {
 function removeItem() {
     const xhr = new XMLHttpRequest();
     const formData = new FormData();
-    formData.set('productId', `${form.dataset.productId}`);
+    formData.set('productId', form.dataset.productId);
     xhr.open('POST', 'https://neto-api.herokuapp.com/cart/remove');
     xhr.send(formData);
     xhr.addEventListener('load', getCart);
@@ -208,7 +208,7 @@ function sendData(event) {
     if (sizeChecked && colorChecked) {
         const xhr = new XMLHttpRequest();
         const formData = new FormData(form);
-        formData.set('productId', `${form.dataset.productId}`);
+        formData.set('productId', form.dataset.productId);
         xhr.open('POST', 'https://neto-api.herokuapp.com/cart');
         xhr.send(formData);
         xhr.addEventListener('load', () => {
