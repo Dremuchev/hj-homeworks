@@ -42,9 +42,11 @@ function loginIn(event) {
     if (event.target.classList.contains('button')) {
         event.preventDefault();
         xhr.addEventListener('load', (event) => {
-            outputIn.innerText = JSON.parse(xhr.responseText).message;
-        checkboxToggle();
-    })
+            if (200 <= xhr.status && xhr.status < 300) {
+                outputIn.innerText = JSON.parse(xhr.responseText).message;
+            }
+            checkboxToggle();
+        })
         const loginForm = new FormData(signIn);
         if (loginForm.get('email') !== '' && loginForm.get('password') !== '') {
             xhr.open('POST', 'https://neto-api.herokuapp.com/signin');
