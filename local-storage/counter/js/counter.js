@@ -26,4 +26,3 @@ function changeCounter(event) {
             break;
     }
 }
-
