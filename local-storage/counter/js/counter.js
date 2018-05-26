@@ -10,19 +10,15 @@ function changeCounter(event) {
     switch(event.target.id) {
         case 'increment':
             counter++;
-            counterInfo.innerText = counter;
-            localStorage.counter = counter;
             break;
         case 'decrement':
             counter--;
-            counterInfo.innerText = counter;
-            localStorage.counter = counter;
             break;
         case 'reset':
             localStorage.clear();
             counter = 0;
-            localStorage.counter = counter;
-            counterInfo.innerText = counter;
             break;
     }
+    counterInfo.innerText = counter;
+    localStorage.counter = counter;
 }
