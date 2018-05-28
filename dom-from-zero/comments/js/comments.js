@@ -27,7 +27,7 @@ function createComment(comment) {
   avatar.setAttribute('style', `background-image: url(${comment.author.pic})`);
   commentBlock.className = 'comment-block';
   commentText.className = 'comment-text';
-  const textArray = comment.text.split('\n').join('<br>').toString().split('<br>');
+  const textArray = comment.text.split('\n');
   const textNode = textArray.reduce((emptyElement, element) => {
     emptyElement.appendChild(document.createTextNode(element));
     emptyElement.appendChild(document.createElement('br'));
