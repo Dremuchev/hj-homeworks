@@ -196,6 +196,7 @@ function createScheme(seatingRow, index) {
         ) }
     return array;
 }
+
 function createSchemeEngine(block) {
     if ((block === undefined) || (block === null) || (block === false)) {
         return document.createTextNode('');
