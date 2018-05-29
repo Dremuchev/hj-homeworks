@@ -5,6 +5,7 @@ const btnSetFull = document.getElementById('btnSetFull');
 const btnSetEmpty = document.getElementById('btnSetEmpty');
 const seatMapTitle = document.getElementById('seatMapTitle');
 const seatMapDiv = document.getElementById('seatMapDiv');
+let plane, seats, totalPax, totalAdult, totalHalf;
 btnSetFull.disabled = true;
 btnSetEmpty.disabled = true;
 
@@ -14,66 +15,28 @@ btnSeatMap.addEventListener('click', event => {
     xhr.open('GET', `https://neto-api.herokuapp.com/plane/${acSelect.value}`);
     xhr.send('');
     xhr.addEventListener('load', () => {
-        const plane = JSON.parse(xhr.responseText);
-        console.log(plane)
-        const seats = document.getElementsByClassName('seat');
-        const totalPax = document.getElementById('totalPax');
-        const totalAdult = document.getElementById('totalAdult');
-        const totalHalf = document.getElementById('totalHalf');
+        plane = JSON.parse(xhr.responseText);
+        seats = document.getElementsByClassName('seat');
+        totalPax = document.getElementById('totalPax');
+        totalAdult = document.getElementById('totalAdult');
+        totalHalf = document.getElementById('totalHalf');
         seatMapTitle.innerText = `${plane.title} (${plane.passengers} пассажиров)`;
 
-        Array.from(seatMapDiv.children)
-            .forEach(el => seatMapDiv.removeChild(el));
+        Array.from(seatMapDiv.children).forEach(el => seatMapDiv.removeChild(el));
 
-        seatMapDiv
-            .appendChild(createSchemeEngine(plane.scheme.map(((row, index) => createScheme(row, index)))))
+        seatMapDiv.appendChild(createSchemeEngine(plane.scheme.map(((row, index) => createScheme(row, index)))))
 
         btnSetFull.disabled = false;
-        btnSetFull.addEventListener('click', event => {
-            event.preventDefault();
-            for (const seat of seats) {
-                seat.className = 'col-xs-4 seat adult';
-            }
-            totalAdult.innerText = document.getElementsByClassName('adult').length;
-            totalHalf.innerText = document.getElementsByClassName('half').length;
-        })
+        btnSetFull.addEventListener('click', changeAllSeats);
 
         btnSetEmpty.disabled = false;
-        btnSetEmpty.addEventListener('click', event => {
-            event.preventDefault();
-            for (const seat of seats) {
-                seat.className = 'col-xs-4 seat';
-            }
-            totalAdult.innerText = document.getElementsByClassName('adult').length;
-            totalHalf.innerText = document.getElementsByClassName('half').length;
-        })
+        btnSetEmpty.addEventListener('click', changeAllSeats);
 
         for (const seat of seats) {
-            seat.addEventListener('click', event => {
-                const currentSeat = event.currentTarget;
-                if(currentSeat.classList.contains('seat') || currentSeat.classList.contains('seat-label')) {
-                    if (!event.altKey) {
-                        if (currentSeat.classList.contains('adult') || currentSeat.classList.contains('half')) {
-                            currentSeat.className = 'col-xs-4 seat';
-                        } else {
-                            currentSeat.classList.toggle('adult');
-                        }
-                        totalAdult.innerText = document.getElementsByClassName('adult').length;
-                        totalHalf.innerText = document.getElementsByClassName('half').length;
-                        return;
-                    }
-                    switch (event.type) {
-                        case 'click' :
-                            currentSeat.classList.toggle('half');
-                            totalHalf.innerText = document.getElementsByClassName('half').length;
-                            break;
-                    }
-                }
-            })
+            seat.addEventListener('click', changeSeat);
         }
-        totalPax.innerText = seats.length;
-        totalAdult.innerText = document.getElementsByClassName('adult').length;
-        totalHalf.innerText = document.getElementsByClassName('half').length;
+
+        showSeatsCount();
     })
 })
 
@@ -217,4 +180,45 @@ function createSchemeEngine(block) {
     [].concat(block.cls || []).forEach(className => element.classList.add(className));
     element.appendChild(createSchemeEngine(block.content));
     return element;
+}
+
+function showSeatsCount() {
+    totalPax.innerText = seats.length;
+    totalAdult.innerText = document.getElementsByClassName('adult').length;
+    totalHalf.innerText = document.getElementsByClassName('half').length;
+}
+
+function changeAllSeats(event) {
+    event.preventDefault();
+    for (const seat of seats) {
+        if (event.currentTarget.id === 'btnSetFull') {
+            seat.className = 'col-xs-4 seat adult';
+        }
+        if (event.currentTarget.id === 'btnSetEmpty') {
+            seat.className = 'col-xs-4 seat';
+        }
+    }
+    showSeatsCount();
+}
+
+function changeSeat(event) {
+    const currentSeat = event.currentTarget;
+    if(currentSeat.classList.contains('seat') || currentSeat.classList.contains('seat-label')) {
+        if (!event.altKey) {
+            if (currentSeat.classList.contains('adult') || currentSeat.classList.contains('half')) {
+                currentSeat.className = 'col-xs-4 seat';
+            } else {
+                currentSeat.classList.toggle('adult');
+            }
+            showSeatsCount();
+            return;
+        }
+        switch (event.type) {
+            case 'click' :
+                currentSeat.classList.remove('adult');
+                currentSeat.classList.toggle('half');
+                showSeatsCount();
+                break;
+        }
+    }
 }
