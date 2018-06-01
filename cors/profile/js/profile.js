@@ -35,4 +35,3 @@ loadData('https://neto-api.herokuapp.com/profile/me')
     .then(loadData)
     .then(showElement)
     .then(() => document.querySelector('.content').style.display = 'initial');
-
