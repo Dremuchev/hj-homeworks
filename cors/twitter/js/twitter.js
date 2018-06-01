@@ -1,24 +1,24 @@
 'use strict';
-// const xhr = new XMLHttpRequest();
-// xhr.open('GET', 'https://neto-api.herokuapp.com/twitter/json');
-// xhr.send();
-// xhr.addEventListener('load', () => console.log(xhr.responseText));
 
 function loadData(url) {
+    const functionName = 'callback' + parseInt(Math.random() * (100 - 1) + 1);
     return new Promise((done, fail) => {
-        window.parseElement = done;
-
-        const script = document.scripts[0].cloneNode();
-        script.src = url;
+        window[functionName] = done;
+        const script = document.createElement('script');
+        script.src = `${url}?jsonp=${functionName}`;
         document.body.appendChild(script);
-    })
+});
 }
 
 function showElement(element) {
-    const target = document.querySelector('.content');
-    console.log(JSON.parse((element)));
-    target.innerHTML = JSON.parse(element);
     console.log(element);
+    document.querySelector('[data-wallpaper]').src = element.wallpaper;
+    document.querySelector('[data-username]').innerText = element.username;
+    document.querySelector('[data-description]').innerText = element.description;
+    document.querySelector('[data-pic]').src = element.pic;
+    document.querySelector('[data-tweets]').innerText = element.tweets;
+    document.querySelector('[data-followers]').innerText = element.followers;
+    document.querySelector('[data-following]').innerText = element.following;
 }
 
-loadData('https://neto-api.herokuapp.com/twitter/json').then(showElement);
+loadData('https://neto-api.herokuapp.com/twitter/jsonp').then(showElement);
