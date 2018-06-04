@@ -11,7 +11,6 @@ function loadData(url) {
 }
 
 function showElement(element) {
-    console.log(element);
     document.querySelector('[data-wallpaper]').src = element.wallpaper;
     document.querySelector('[data-username]').innerText = element.username;
     document.querySelector('[data-description]').innerText = element.description;
