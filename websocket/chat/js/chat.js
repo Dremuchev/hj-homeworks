@@ -59,6 +59,7 @@ function messageHandler(event) {
         messagesContent.appendChild(messagePersonalCopy);
         connection.send(messageInput.value);
         messageInput.value = '';
+        messagesContent.style.top = (messagesContent.clientHeight - messagesContent.scrollHeight) + 'px';
     }
 }
 
