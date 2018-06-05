@@ -12,7 +12,7 @@ function changeCounter(event) {
             counter++;
             break;
         case 'decrement':
-            counter--;
+            if (counter > 0) counter--;
             break;
         case 'reset':
             localStorage.clear();
