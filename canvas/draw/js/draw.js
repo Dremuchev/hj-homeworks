@@ -7,7 +7,7 @@ let brushCount;
 let color = 0;
 let drawing = false;
 let needsRepaint = false;
-let shift;
+let isShift;
 
 document.addEventListener('DOMContentLoaded', canvasSize);
 document.addEventListener('dblclick', clearCanvas);
@@ -41,7 +41,7 @@ function getBrushSize() {
 }
 
 function getHue() {
-    if (shift){
+    if (isShift){
         return (color > 0 && color <= 359)? color-- : color = 359;
     } else {
         return (color <= 359)? color++ : color = 0;
@@ -76,7 +76,7 @@ canvas.addEventListener("mousedown", event => {
     curves.push(curve);
     needsRepaint = true;
     if(event.shiftKey){
-        shift = true;
+        isShift = true;
     }
 });
 
@@ -93,9 +93,9 @@ canvas.addEventListener("mouseleave", () => {
 canvas.addEventListener("mousemove", event => {
     if (drawing) {
         if (event.shiftKey) {
-            shift = true;
+            isShift = true;
         } else {
-            shift = false;
+            isShift = false;
         }
 
         const point = [event.offsetX, event.offsetY]
