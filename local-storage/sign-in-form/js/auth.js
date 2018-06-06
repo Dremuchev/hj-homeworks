@@ -80,7 +80,7 @@ function sendRequest(event){
                 }
             }
         } catch (err) {
-                console.log(err.message, err.message);
+                console.log(err.message);
             }
     });
 }
