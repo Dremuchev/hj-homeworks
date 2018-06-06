@@ -1,7 +1,6 @@
 'use strict';
 const socket = new WebSocket('wss://neto-api.herokuapp.com/comet/websocket');
 socket.addEventListener('message', event => {
-    console.log(event.data);
     const flipIt = document.querySelector('.websocket .flip-it');
     if (flipIt) {
         flipIt.classList.remove('flip-it');

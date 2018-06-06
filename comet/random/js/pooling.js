@@ -10,7 +10,6 @@ function poolingReqest() {
 pooling.addEventListener('load', flipPoolingDiv);
 
 function flipPoolingDiv() {
-    console.log(pooling.responseText);
     const flipIt = document.querySelector('.pooling .flip-it');
     if (flipIt) {
         flipIt.classList.remove('flip-it');

@@ -5,7 +5,6 @@ function subscribe() {
     const longPooling = new XMLHttpRequest();
 
     longPooling.addEventListener('load', () => {
-        console.log(parseInt(longPooling.responseText));
         const flipIt = document.querySelector('.long-pooling .flip-it');
         if (flipIt) {
             flipIt.classList.remove('flip-it');
