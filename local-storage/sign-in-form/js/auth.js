@@ -1,19 +1,24 @@
 'use strict';
 const signIn = document.querySelector('.sign-in-htm');
-signIn.addEventListener('click', loginIn);
+const signUp = document.querySelector('.sign-up-htm');
 const check = document.getElementById('check');
-const outputIn = signIn.querySelector('.error-message');
+const output = document.getElementsByClassName('error-message');
+const buttons = document.getElementsByClassName('button');
+
+for(let button of buttons){
+    button.addEventListener('click', sendRequest);
+}
 
 check.addEventListener('click', () => {
     if(checkboxToggle()) {
-    localStorage.clear();
-    outputIn.innerText = '';
-    check.value = 0;
-    checkboxToggle();
-} else {
-    check.value = 1;
-    checkboxToggle();
-}
+        localStorage.clear();
+        outputIn.innerText = '';
+        check.value = 0;
+        checkboxToggle();
+    } else {
+        check.value = 1;
+        checkboxToggle();
+    }
 })
 
 const inputs = signIn.querySelectorAll('.input');
@@ -42,57 +47,40 @@ function checkboxToggle() {
     }
 }
 
-function loginIn(event) {
+function sendRequest(event){
+    event.preventDefault();
+    const userInfo = {};
     const xhr = new XMLHttpRequest();
-    outputIn.innerText = '';
-    if (event.target.classList.contains('button')) {
-        event.preventDefault();
-        xhr.addEventListener('load', (event) => {
-            if (200 <= xhr.status && xhr.status < 300) {
-                outputIn.innerText = JSON.parse(xhr.responseText).message;
-            }
-            checkboxToggle();
-        })
-        const loginForm = new FormData(signIn);
-        const newUser = {};
-        for (const [key, value] of loginForm) {
-            newUser[key] = value;
-        }
-        if (loginForm.get('email') !== '' && loginForm.get('password') !== '') {
-            xhr.open('POST', 'https://neto-api.herokuapp.com/signin');
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(JSON.stringify(newUser));
-        } else {
-            outputIn.innerText = 'Заполните поля!';
-            return;
-        }
-    }
-}
+    let formData;
 
-const signUp = document.querySelector('.sign-up-htm');
-const outputUP = signUp.querySelector('.error-message');
-signUp.addEventListener('click', loginUp);
-
-function loginUp(event) {
-    const xhr = new XMLHttpRequest();
-    outputUP.innerText = '';
-    if(event.target.classList.contains('button')) {
-        event.preventDefault();
-        xhr.addEventListener('load', (event) => {
-            if (200 <= xhr.status && xhr.status < 300) {
-            outputUP.innerText = JSON.parse(xhr.responseText).message;
-        } else {
-            outputUP.innerText = 'Произошла ошибка! Повторите процедуру позднее... Приносим свои извенения!';
-            throw new Error('Ошибка: ' + xhr.status + ' : ' + xhr.statusText);
-        }
-    });
-        const signUpForm = new FormData(signUp);
-        const newUser = {};
-        for (const [key, value] of signUpForm) {
-            newUser[key] = value;
-        }
+    if (this.value === 'Войти'){
+        formData = new FormData(signIn);
+        xhr.open('POST', 'https://neto-api.herokuapp.com/signin');
+    } else {
+        formData = new FormData(signUp);
         xhr.open('POST', 'https://neto-api.herokuapp.com/signup');
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify(newUser));
     }
+
+    for (const [key, value] of formData) {
+        userInfo[key] = value;
+    }
+
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify(userInfo));
+    xhr.addEventListener("load", () => {
+        try {
+            const getServerData = JSON.parse(xhr.responseText);
+            if (200 <= xhr.status && xhr.status < 300){
+                if (getServerData.error){
+                    output[0].textContent = getServerData.message;
+                    output[1].textContent = getServerData.message;
+                } else {
+                    output[0].textContent = `Пользователь ${getServerData.name} успешно авторизован`;
+                    output[1].textContent = `Пользователь ${getServerData.name} успешно зарегистрирован`;
+                }
+            }
+        } catch (err) {
+                console.log(err.message, err.message);
+            }
+    });
 }
