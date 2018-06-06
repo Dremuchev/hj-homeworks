@@ -15,7 +15,6 @@ function getRandomFloat(min, max, toFix) {
 function generateStar() {
     const colors = [ '#ffffff', '#ffe9c4', '#d4fbff'];
     const randomQuanity = getRandomInt(200, 400);
-    ctx.beginPath();
     ctx.fillStyle = '#000';
     ctx.rect(0, 0, canvas.clientWidth, canvas.clientHeight);
     ctx.fill();
