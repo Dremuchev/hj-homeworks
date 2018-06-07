@@ -18,6 +18,10 @@ if (!navigator.mediaDevices) {
     errorMessage.innerText = 'Media Device is not available!';
 }
 
+navigator.mediaDevices.getUserMedia({video: true})
+    .then(stream => streaming.call(stream))
+    .catch (e => console.warn(e.message))
+
 function streaming() {
     controls.classList.add('visible');
     video.src = URL.createObjectURL(this);
@@ -80,33 +84,29 @@ function actions(event) {
         list.removeChild(currentElement);
     }
     if (event.target.innerText === 'file_upload') {
+        const pic = currentElement.firstChild;
         const imgCanvas = document.createElement('canvas');
-        imgCanvas.width = currentElement.naturalWidth;
-        imgCanvas.height = currentElement.naturalHeight;
         const imgContext = imgCanvas.getContext('2d');
-        imgContext.drawImage(currentElement.firstChild, 0, 0);
         const form = new FormData();
-        const myHeaders = new Headers();
-        myHeaders.append('Content-Type', 'multipart/form-data');
+        imgCanvas.width = pic.naturalWidth;
+        imgCanvas.height = pic.naturalHeight;
+        imgContext.drawImage(pic, 0, 0);
         imgCanvas.toBlob((blob) => {
             form.append('image', blob);
-            console.log(form.get('image'), blob);
             fetch('https://neto-api.herokuapp.com/photo-booth', {
                 method: 'POST',
-                headers: myHeaders,
                 body: form
             })
-            .then(res => console.log(res.responseText))
+            .then(event.target.parentNode.style.display = 'none')
             .catch(e => console.warn(e.message));
         });
         console.log(form.get('image'))
+    }
+    if (event.target.innerText = 'file_download') {
+        event.target.parentNode.style.display = 'none';
     }
 }
 
 list.addEventListener('click', actions);
 
 button.addEventListener('click', takePhoto);
-
-navigator.mediaDevices.getUserMedia({video: true})
-    .then(stream => streaming.call(stream))
-    .catch (e => console.warn(e.message))
