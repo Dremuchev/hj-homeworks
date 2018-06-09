@@ -24,7 +24,6 @@ connection.addEventListener('message', event => {
     const responseMessage = event.data;
     const loading = messagesTemplates.getElementsByClassName('loading')[0];
     const messageFromUser = messagePersonal.previousElementSibling;
-    const now = new Date();
     if(responseMessage === '...') {
         const loadingCopy = loading.cloneNode(true);
         messagesContent.appendChild(loadingCopy);
@@ -35,7 +34,7 @@ connection.addEventListener('message', event => {
             }
         const messageFromUserCopy = messageFromUser.cloneNode(true);
         messageFromUserCopy.getElementsByClassName('message-text')[0].innerText = responseMessage;
-        messageFromUserCopy.getElementsByClassName('timestamp')[0].innerText = timeParser(now);;
+        messageFromUserCopy.getElementsByClassName('timestamp')[0].innerText = timeParser();;
         messagesContent.appendChild(messageFromUserCopy);
     }
 })
@@ -53,9 +52,8 @@ function messageHandler(event) {
     event.preventDefault();
     if (messageInput.value) {
         const messagePersonalCopy = messagePersonal.cloneNode(true);
-        const now = new Date();
         messagePersonalCopy.getElementsByClassName('message-text')[0].innerText = messageInput.value;
-        messagePersonalCopy.getElementsByClassName('timestamp')[0].innerText = timeParser(now);
+        messagePersonalCopy.getElementsByClassName('timestamp')[0].innerText = timeParser();
         messagesContent.appendChild(messagePersonalCopy);
         connection.send(messageInput.value);
         messageInput.value = '';
@@ -63,8 +61,9 @@ function messageHandler(event) {
     }
 }
 
-function timeParser(nowDate) {
-    const hh = (nowDate.getHours() < 10) ? '0' + nowDate.getHours() : nowDate.getHours();
-    const mm = (nowDate.getMinutes() < 10) ? '0' + nowDate.getMinutes() : nowDate.getMinutes();
-    return hh + ':' + mm;
+function timeParser() {
+    const date = new Date();
+    const options = {hour: "2-digit", minute: "2-digit"};
+    const formatDate = new Intl.DateTimeFormat("ru-RU", options).format;
+    return formatDate(date);
 }
