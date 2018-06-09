@@ -1,13 +1,4 @@
 'use strict';
-const node = {
-    name: 'h1',
-    props: { class: 'main-title' },
-    childs: [ 'Заголовок' ]
-};
-
-const element = createElement(node);
-const wrapper = document.getElementById('root');
-wrapper.appendChild(element);
 
 function createElement(node) {
 
